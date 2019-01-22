@@ -95,6 +95,18 @@ namespace CodeKata.BinaryGap
         {
             TestInstance.GetMaxBinaryGap(int.MaxValue).ShouldBe(0);
         }
+
+        [Test]
+        public void CodilitySample32()
+        {
+            TestInstance.GetMaxBinaryGap(32).ShouldBe(0);
+        }
+
+        [Test]
+        public void CodilitySample1041()
+        {
+            TestInstance.GetMaxBinaryGap(1041).ShouldBe(5);
+        }
     }
 
     public class BinaryGapFinder
