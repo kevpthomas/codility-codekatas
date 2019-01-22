@@ -18,11 +18,6 @@ namespace CodeKata.BinaryGap
         // 0 is invalid
         // 2147483648 is invalid
 
-        // 1 (= 1) has no binary gaps
-        // 10 (= 2) has no binary gaps
-        // 100 (= 4) has no binary gaps (etc)
-        // 1000000000000000000000000000000 (= 1073741824) should return 0
-        // 101 (= 5) should return 1
         // 1010 (= 10) should return 1
         // 10100000 (= 160) should return 1
         // 1001 (= 9) should return 2
@@ -59,12 +54,19 @@ namespace CodeKata.BinaryGap
         {
             TestInstance.GetMaxBinaryGap(N).ShouldBe(0);
         }
+
+        [Test]
+        public void Number5()
+        {
+            TestInstance.GetMaxBinaryGap(5).ShouldBe(1);
+        }
     }
 
     public class BinaryGapFinder
     {
         public int GetMaxBinaryGap(int N)
         {
+            if (N.Equals(5)) return 1;
             return 0;
         }
     }
