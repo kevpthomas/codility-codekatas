@@ -16,29 +16,6 @@ namespace CodeKata.BinaryGap
          * Integer in range 1 to 2147483647
          */
 
-        // 1010 (= 10) should return 1
-        // 10100000 (= 160) should return 1
-        // 1001 (= 9) should return 2
-        // 1001001 (= 73) should return 2
-        // 100101 (= 37) should return 2
-        // 10010001 (= 145) should return 3
-        // 11 (= 3) should return 0
-        // 111 (= 7) should return 0
-        // 1111111111111111111111111111111 is max value (= 2147483647) and should return 0
-        // 1000000000000000000000000000001 is largest binary gap (= 1073741825), should return 29
-
-        // need to convert input to binary string to array
-
-        //[Test]
-        //public void Foo()
-        //{
-        //    var foo = "111".ToCharArray();
-        //    foo.Length.ShouldBe(3);
-        //    foo[0].ShouldBe('1');
-        //    foo[1].ShouldBe('1');
-        //    foo[2].ShouldBe('1');
-        //}
-
         [Test]
         public void Number0()
         {
@@ -51,9 +28,9 @@ namespace CodeKata.BinaryGap
             TestInstance.GetMaxBinaryGap(1).ShouldBe(0);
         }
 
-        [TestCase(2)]
-        [TestCase(4)]
-        [TestCase(1073741824)]
+        [TestCase(2)]          // 10
+        [TestCase(4)]          // 100
+        [TestCase(1073741824)] // 1000000000000000000000000000000
         public void Leading1_WithTrailingZeros(int N)
         {
             TestInstance.GetMaxBinaryGap(N).ShouldBe(0);
@@ -126,11 +103,34 @@ namespace CodeKata.BinaryGap
         {
             if (N <= 0) throw new ArgumentException($"The supplied value must be at least 1, but was {N}", nameof(N));
 
-            if (N.Equals(5) || N.Equals(10)) return 1;
-            if (N.Equals(9) || N.Equals(37) || N.Equals(73)) return 2;
-            if (N.Equals(145)) return 3;
-            if (N.Equals(1073741825)) return 29;
-            return 0;
+            var binaryCharArray = Convert.ToString(N, 2).ToCharArray();
+
+            var len = binaryCharArray.Length;
+            var max = 0;
+            var tempMax = 0;
+            var hasGap = false;
+
+            for (var i = len - 1; i >= 0; i--)
+            {
+                if (hasGap)
+                {
+                    if (binaryCharArray[i] == '1')
+                    {
+                        tempMax = 0;
+                    }
+                }
+                else
+                {
+                    if (binaryCharArray[i] == '1') hasGap = true;
+                }
+
+                if (hasGap && binaryCharArray[i] == '0')
+                    tempMax += 1;
+
+                if (tempMax > max) max = tempMax;
+            }
+
+            return max;
         }
     }
 }
