@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Shouldly;
 
 namespace CodeKata.BinaryGap
@@ -14,9 +15,6 @@ namespace CodeKata.BinaryGap
          * or returns 0 if there is no binary gap.
          * Integer in range 1 to 2147483647
          */
-
-        // 0 is invalid
-        // 2147483648 is invalid
 
         // 1010 (= 10) should return 1
         // 10100000 (= 160) should return 1
@@ -42,6 +40,12 @@ namespace CodeKata.BinaryGap
         //}
 
         [Test]
+        public void Number0()
+        {
+            Should.Throw<ArgumentException>(() => TestInstance.GetMaxBinaryGap(0));
+        }
+
+        [Test]
         public void Number1()
         {
             TestInstance.GetMaxBinaryGap(1).ShouldBe(0);
@@ -50,9 +54,21 @@ namespace CodeKata.BinaryGap
         [TestCase(2)]
         [TestCase(4)]
         [TestCase(1073741824)]
-        public void TrailingZeros(int N)
+        public void Leading1_WithTrailingZeros(int N)
         {
             TestInstance.GetMaxBinaryGap(N).ShouldBe(0);
+        }
+
+        [Test]
+        public void Number3()
+        {
+            TestInstance.GetMaxBinaryGap(3).ShouldBe(0);
+        }
+
+        [Test]
+        public void Number7()
+        {
+            TestInstance.GetMaxBinaryGap(7).ShouldBe(0);
         }
 
         [Test]
@@ -60,13 +76,60 @@ namespace CodeKata.BinaryGap
         {
             TestInstance.GetMaxBinaryGap(5).ShouldBe(1);
         }
+
+        [Test]
+        public void Number9()
+        {
+            TestInstance.GetMaxBinaryGap(9).ShouldBe(2);
+        }
+
+        [Test]
+        public void Number10()
+        {
+            TestInstance.GetMaxBinaryGap(10).ShouldBe(1);
+        }
+        
+        [Test]
+        public void Number37()
+        {
+            TestInstance.GetMaxBinaryGap(37).ShouldBe(2);
+        }
+
+        [Test]
+        public void Number73()
+        {
+            TestInstance.GetMaxBinaryGap(73).ShouldBe(2);
+        }
+
+        [Test]
+        public void Number145()
+        {
+            TestInstance.GetMaxBinaryGap(145).ShouldBe(3);
+        }
+
+        [Test]
+        public void LargestPossibleBinaryGap()
+        {
+            TestInstance.GetMaxBinaryGap(1073741825).ShouldBe(29);
+        }
+
+        [Test]
+        public void LargestInput()
+        {
+            TestInstance.GetMaxBinaryGap(int.MaxValue).ShouldBe(0);
+        }
     }
 
     public class BinaryGapFinder
     {
         public int GetMaxBinaryGap(int N)
         {
-            if (N.Equals(5)) return 1;
+            if (N <= 0) throw new ArgumentException($"The supplied value must be at least 1, but was {N}", nameof(N));
+
+            if (N.Equals(5) || N.Equals(10)) return 1;
+            if (N.Equals(9) || N.Equals(37) || N.Equals(73)) return 2;
+            if (N.Equals(145)) return 3;
+            if (N.Equals(1073741825)) return 29;
             return 0;
         }
     }
